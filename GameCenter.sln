@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameCenter.API", "GameCenter.API\GameCenter.API.csproj", "{69E44226-8C48-4E90-8F91-0231B7C058A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{8219D958-DC0B-40C2-BBE7-986863BECB8A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69E44226-8C48-4E90-8F91-0231B7C058A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69E44226-8C48-4E90-8F91-0231B7C058A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69E44226-8C48-4E90-8F91-0231B7C058A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69E44226-8C48-4E90-8F91-0231B7C058A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{69E44226-8C48-4E90-8F91-0231B7C058A4} = {8219D958-DC0B-40C2-BBE7-986863BECB8A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5DDC746-0BB3-4C39-837D-FD38D1176FF0}
+	EndGlobalSection
+EndGlobal
