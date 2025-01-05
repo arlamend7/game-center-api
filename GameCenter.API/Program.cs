@@ -20,6 +20,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSecret))
                     };
 
@@ -29,15 +30,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         {
                             var accessToken = context.Request.Query["access_token"];
                             var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken))
+                            // If token is not found in query string, check the Authorization header
+                            if (string.IsNullOrEmpty(accessToken) && context.Request.Headers.ContainsKey("Authorization"))
                             {
-                                accessToken = context.Request.Headers.Authorization;   
+                                var authorizationHeader = context.Request.Headers["Authorization"].ToString();
+
+                                // Check if it starts with "Bearer " and remove it
+                                if (authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    accessToken = authorizationHeader["Bearer ".Length..]; // Remove the "Bearer " prefix
+                                }
                             }
-                            // If the request is for SignalR, retrieve the token from the query string
-                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/room"))
-                            {
-                                context.Token = accessToken;
-                            }
+
+                            // Assign the token for further processing
+                            context.Token = accessToken;
+
                             return Task.CompletedTask;
                         }
                     };
