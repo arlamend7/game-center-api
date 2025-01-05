@@ -34,5 +34,5 @@ jobs:
         with:
           app-name: 'kap-games-api'
           slot-name: 'Production'
-          package: .
+          package: ${{env.DOTNET_ROOT}}/myapp
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BF424D5A886B4DC790E337179DA733EA }}
