@@ -25,8 +25,7 @@ app.UseCors(x =>
 {
     x.SetIsOriginAllowed((origin) => true)
     .AllowAnyMethod()
-    .AllowAnyHeader()
-    .AllowCredentials();
+    .AllowAnyHeader();
 });
 app.MapControllers();
 app.MapHub<RoomHub>("/room");
