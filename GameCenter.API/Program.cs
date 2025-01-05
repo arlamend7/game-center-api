@@ -30,7 +30,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         {
                             var accessToken = context.Request.Query["access_token"];
                             var path = context.HttpContext.Request.Path;
-
+                            if (!string.IsNullOrEmpty(accessToken))
+                            {
+                                accessToken = context.Request.Headers.Authorization;   
+                            }
                             // If the request is for SignalR, retrieve the token from the query string
                             if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/room"))
                             {
