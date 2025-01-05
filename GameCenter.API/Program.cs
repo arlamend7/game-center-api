@@ -1,4 +1,3 @@
-using GameCenter.API.signals;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +12,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
         builder => builder
-            .WithOrigins("http://127.0.0.1:5500") // Replace with your client's origin
+            .SetIsOriginAllowed((origin) => true) // Replace with your client's origin
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials());
@@ -34,6 +33,6 @@ app.UseAuthorization();
 
 app.UseCors("CorsPolicy");
 app.MapControllers();
-app.MapHub<ConnectFourHub>("/connect-four");
+app.MapHub<RoomHub>("/room");
 
 app.Run();
