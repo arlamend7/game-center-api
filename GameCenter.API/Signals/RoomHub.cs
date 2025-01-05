@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
-[Authorize]
 public class RoomHub : Hub
 {
-    [Authorize]
+    [Authorize(JwtBearerDefaults.AuthenticationScheme)]
     public override async Task OnConnectedAsync()
     {
         var roomId = Context.GetHttpContext()?.Request.Query["roomId"].ToString();
