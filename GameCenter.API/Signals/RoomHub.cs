@@ -22,7 +22,6 @@ public class RoomHub : Hub
         await base.OnConnectedAsync();
     }
 
-    [Authorize]
     public async Task SendMessage(string message)
     {
         var roomId = Context.GetHttpContext()?.Request.Query["roomId"].ToString();
@@ -39,7 +38,6 @@ public class RoomHub : Hub
         }
     }
 
-    [Authorize]
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         var roomId = Context.GetHttpContext()?.Request.Query["roomId"].ToString();
