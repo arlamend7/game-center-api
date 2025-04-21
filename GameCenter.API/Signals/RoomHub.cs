@@ -25,7 +25,6 @@ public class RoomHub : Hub
     public async Task SendMessage(string message)
     {
         var roomId = Context.GetHttpContext()?.Request.Query["roomId"].ToString();
-
         if (!string.IsNullOrEmpty(roomId))
         {
             // Broadcast the message to the group based on roomId
