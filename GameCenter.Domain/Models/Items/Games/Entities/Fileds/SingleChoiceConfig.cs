@@ -1,8 +1,8 @@
 ﻿using GameCenter.Domain.Enums;
-using GameCenter.Domain.Responses;
+using GameCenter.Domain.Models.Items.Games.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace GameCenter.Domain.Models.Games.Entities.Fileds
+namespace GameCenter.Domain.Models.Items.Games.Entities.Fileds
 {
     [BsonDiscriminator]
 

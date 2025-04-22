@@ -1,7 +1,7 @@
 ﻿using GameCenter.Domain.Models.Players.Entities;
 using GameCenter.Domain.Services.Interfaces;
+using GameCenter.Utilities.TokenBuilder;
 using Microsoft.AspNetCore.Mvc;
-using SGTC.Authentication.TokenBuilder;
 
 namespace GameCenter.API.Controllers
 {

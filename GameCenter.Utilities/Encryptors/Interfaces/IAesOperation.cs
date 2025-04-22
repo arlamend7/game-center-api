@@ -1,4 +1,4 @@
-﻿namespace SGTC.Utilities.Encryptors.Interfaces
+﻿namespace GameCenter.Utilities.Encryptors.Interfaces
 {
     public interface IAesOperation
     {

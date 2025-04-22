@@ -3,9 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using SGTC.Core.Files.BlobStorages.Interfaces;
+using GameCenter.Utilities.AzureBlobStorage.Interfaces;
 
-namespace SGTC.Core.Files.BlobStorages
+namespace GameCenter.Utilities.AzureBlobStorage
 {
     public class AzureBlobStorage : IAzureBlobStorage
     {

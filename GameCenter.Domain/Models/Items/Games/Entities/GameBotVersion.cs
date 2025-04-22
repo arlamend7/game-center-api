@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GameCenter.Common.Entities;
+using GameCenter.Domain.Models.Base;
 
-namespace GameCenter.Domain.Models.Games.Entities
+namespace GameCenter.Domain.Models.Items.Games.Entities
 {
     public class GameBotVersion : ITranslatable<GameBotVersionTranslation>
     {

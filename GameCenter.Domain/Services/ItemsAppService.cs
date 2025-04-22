@@ -2,7 +2,7 @@
 using System.Linq;
 using GameCenter.Domain.Models.Items.Entities;
 using GameCenter.Domain.Services.Interfaces;
-using GameCenter.Infra;
+using GameCenter.Utilities.MongoDb;
 using MongoDB.Driver;
 
 namespace GameCenter.Domain.Services

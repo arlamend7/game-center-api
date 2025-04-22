@@ -1,10 +1,9 @@
-﻿using GameCenter.Common.Entities;
-using GameCenter.Domain.Enums;
-using GameCenter.Domain.Models.Games.Entities;
-using GameCenter.Domain.Models.Games.Entities.Fileds;
+﻿using GameCenter.Domain.Enums;
+using GameCenter.Domain.Models.Base;
+using GameCenter.Domain.Models.Items.Games.Entities.Fileds;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace GameCenter.Domain.Responses
+namespace GameCenter.Domain.Models.Items.Games.Entities
 {
 
     [BsonDiscriminator(RootClass = true)]

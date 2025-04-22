@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 
 
-namespace SaendMe.Api.signalR
+namespace GameCenter.API.Signals
 {
     public class ConnectionHub : Hub
     {

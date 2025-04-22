@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace SGTC.Authentication.TokenBuilder
+namespace GameCenter.Utilities.TokenBuilder
 {
     public interface ITokenBuilderConfigurated
     {

@@ -1,4 +1,4 @@
-﻿namespace GameCenter.Domain.Models.Games.Entities
+﻿namespace GameCenter.Domain.Models.Items.Games.Entities
 {
     public class GamePlayers
     {

@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Events;
 
-namespace GameCenter.Infra
+namespace GameCenter.Utilities.MongoDb
 {
     public class MongoDbContext : IMongoDbContext
     {

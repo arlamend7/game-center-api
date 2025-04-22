@@ -1,11 +1,11 @@
-﻿using SGTC.Utilities.Encryptors.Interfaces;
+﻿using GameCenter.Utilities.Encryptors.Interfaces;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace SGTC.Utilities.Encryptors
+namespace GameCenter.Utilities.Encryptors
 {
     public sealed class AesOperation : IAesOperation
     {

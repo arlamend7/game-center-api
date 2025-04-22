@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using GameCenter.Common.Entities;
 using GameCenter.Domain.Enums;
+using GameCenter.Domain.Models.Base;
 using GameCenter.Domain.Models.Items.Entities;
-using GameCenter.Domain.Responses;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace GameCenter.Domain.Models.Games.Entities
+namespace GameCenter.Domain.Models.Items.Games.Entities
 {
     [BsonDiscriminator]
     public class Game : ServerItem

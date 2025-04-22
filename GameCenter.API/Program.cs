@@ -1,10 +1,11 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using GameCenter.API.Converters;
 using GameCenter.Domain;
-using GameCenter.Domain.Models.Games.Entities;
-using GameCenter.Domain.Models.Games.Entities.Fileds;
+using GameCenter.Domain.Enums;
 using GameCenter.Domain.Models.Items.Entities;
-using GameCenter.Domain.Responses;
+using GameCenter.Domain.Models.Items.Games.Entities;
+using GameCenter.Domain.Models.Items.Games.Entities.Fileds;
 using GameCenter.Utilities.Injectors.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -19,15 +20,25 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // IGNORA RECURSIVIDADE
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    options.JsonSerializerOptions.Converters.Add(new PolymorphicJsonConverter<Item>(
-    knownTypes: new[] { typeof(ServerItem), typeof(Game) }
-));
-    options.JsonSerializerOptions.Converters.Add(new PolymorphicJsonConverter<GameOption>(
-  knownTypes: new[] { typeof(NumericConfig), typeof(MultiChoiceConfig), typeof(SingleChoiceConfig), typeof(TextConfig) }
-));
-    options.JsonSerializerOptions.IncludeFields = true;
-    options.JsonSerializerOptions.UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement;
-}); ;
+    options.JsonSerializerOptions.Converters.Add(
+        PolymorphicJsonConverterFactory
+            .For<Item>()
+            .WithDiscriminator(x => x.Type)
+            .Add<Game>(ItemTypeEnum.Game)
+            .Add<ServerItem>(ItemTypeEnum.Article)
+            .Build()
+    );
+    options.JsonSerializerOptions.Converters.Add(
+        PolymorphicJsonConverterFactory
+            .For<GameOption>()
+            .WithDiscriminator(x => x.Type)
+            .Add<NumericConfig>(FieldTypeEnum.Numeric)
+            .Add<MultiChoiceConfig>(FieldTypeEnum.MultiChoice)
+            .Add<SingleChoiceConfig>(FieldTypeEnum.SingleChoice)
+            .Add<TextConfig>(FieldTypeEnum.Text)
+            .Build()
+    );
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

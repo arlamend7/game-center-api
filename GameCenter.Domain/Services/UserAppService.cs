@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using GameCenter.Domain.Models.Players.Entities;
 using GameCenter.Domain.Services.Interfaces;
-using GameCenter.Infra;
+using GameCenter.Utilities.Encryptors.Interfaces;
+using GameCenter.Utilities.MongoDb;
 using MongoDB.Driver;
-using SGTC.Utilities.Encryptors.Interfaces;
 
 namespace GameCenter.Domain.Services
 {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
-namespace SGTC.Authentication.TokenBuilder
+namespace GameCenter.Utilities.TokenBuilder
 {
     public class TokenBuilder : ITokenBuilderConfigurated
     {

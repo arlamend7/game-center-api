@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GameCenter.Domain.Responses;
+using GameCenter.Domain.Models.Items.Games.Entities;
 
-namespace GameCenter.Domain.Models.Games.Entities.Fileds
+namespace GameCenter.Domain.Models.Items.Games.Entities.Fileds
 {
     public class ChoiceTranslation : GameOptionTranslation
     {

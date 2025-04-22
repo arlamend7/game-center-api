@@ -3,7 +3,7 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SGTC.IOC.Injectors
+namespace GameCenter.Utilities.Injectors
 {
     public static class SettingsInjector
     {
@@ -45,5 +45,4 @@ namespace SGTC.IOC.Injectors
             }
         }
     }
-
 }

@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace GameCenter.Common.Entities
+namespace GameCenter.Domain.Models.Base
 {
     public abstract class EntityBase
     {

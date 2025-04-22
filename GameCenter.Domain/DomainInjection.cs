@@ -1,13 +1,13 @@
 ﻿using GameCenter.Domain.Services;
 using GameCenter.Domain.Services.Interfaces;
-using GameCenter.Infra;
-using Microsoft.Extensions.DependencyInjection;
-using SGTC.IOC.Injectors;
-using Microsoft.Extensions.Configuration;
-using SGTC.Utilities.Encryptors.Interfaces;
-using SGTC.Utilities.Encryptors;
-using SGTC.Authentication.TokenBuilder;
+using GameCenter.Utilities.Encryptors;
+using GameCenter.Utilities.Encryptors.Interfaces;
+using GameCenter.Utilities.Injectors;
 using GameCenter.Utilities.Injectors.Models;
+using GameCenter.Utilities.MongoDb;
+using GameCenter.Utilities.TokenBuilder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GameCenter.Domain
 {

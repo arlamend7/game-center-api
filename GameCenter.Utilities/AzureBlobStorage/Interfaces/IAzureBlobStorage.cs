@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace SGTC.Core.Files.BlobStorages.Interfaces
+namespace GameCenter.Utilities.AzureBlobStorage.Interfaces
 {
     public interface IAzureBlobStorage
     {
