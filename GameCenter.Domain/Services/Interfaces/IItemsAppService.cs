@@ -6,8 +6,6 @@ namespace GameCenter.Domain.Services.Interfaces
 {
     public interface IItemsAppService
     {
-        IEnumerable<Game> GetGames();
         IEnumerable<Item> GetItems();
-        IEnumerable<ServerItem> GetServerItems();
     }
 }

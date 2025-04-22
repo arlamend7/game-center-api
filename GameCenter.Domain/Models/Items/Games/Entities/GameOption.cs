@@ -13,7 +13,7 @@ namespace GameCenter.Domain.Responses
     {
         public string FieldName {  get; set; }
         public bool Required { get; set; }
-        public FieldTypeEnum Type { get; }
+        public FieldTypeEnum Type { get; set; }
 
         public GameOption(FieldTypeEnum type) 
         { 
@@ -36,5 +36,10 @@ namespace GameCenter.Domain.Responses
     {
         public string Title { get; set; }
         public string Description { get; set; }
+    }
+
+    public class GameOptionValueTranslation : GameOptionTranslation
+    {
+        public string Suffix { get; set; }
     }
 }

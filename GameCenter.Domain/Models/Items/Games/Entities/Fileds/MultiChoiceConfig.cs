@@ -8,7 +8,6 @@ namespace GameCenter.Domain.Models.Games.Entities.Fileds
 
     public class MultiChoiceConfig : GameOption<ChoiceTranslation>
     {
-
         public MultiChoiceConfig()
             : base(FieldTypeEnum.MultiChoice)
         {

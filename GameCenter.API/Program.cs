@@ -2,14 +2,16 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using GameCenter.Domain;
+using GameCenter.Domain.Models.Games.Entities;
+using GameCenter.Domain.Models.Games.Entities.Fileds;
+using GameCenter.Domain.Models.Items.Entities;
+using GameCenter.Domain.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using GameCenter.Domain;
-using System.Text.Json.Serialization;
-using GameCenter.Domain.Models.Items.Entities;
-using System.Text.Json;
-using GameCenter.Domain.Models.Games.Entities;
 
 const string JwtSecret = "2bfa15feba1b91f5f104342af1ebb4246241713c7843ad39579146862c887eed";
 
@@ -21,7 +23,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // IGNORA RECURSIVIDADE
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    options.JsonSerializerOptions.Converters.Add(new ItemConverter());
+    options.JsonSerializerOptions.Converters.Add(new PolymorphicJsonConverter<Item>(
+    knownTypes: new[] { typeof(ServerItem), typeof(Game) }
+));
+    options.JsonSerializerOptions.Converters.Add(new PolymorphicJsonConverter<GameOption>(
+  knownTypes: new[] { typeof(NumericConfig), typeof(MultiChoiceConfig), typeof(SingleChoiceConfig), typeof(TextConfig) }
+));
     options.JsonSerializerOptions.IncludeFields = true;
     options.JsonSerializerOptions.UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement;
 }); ;
@@ -122,31 +129,41 @@ static string GenerateToken(string userId, int expireMinutes = 60)
 
     return new JwtSecurityTokenHandler().WriteToken(token);
 }
-
-class ItemConverter : JsonConverter<Item>
+public class PolymorphicJsonConverter<TBase> : JsonConverter<TBase>
 {
-    public override Item Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    private readonly Dictionary<string, Type> _typeMap;
+    private readonly string _typeDiscriminator;
+
+    public PolymorphicJsonConverter(string typeDiscriminator = "Type", params Type[] knownTypes)
     {
-        using JsonDocument doc = JsonDocument.ParseValue(ref reader);
-        if (!doc.RootElement.TryGetProperty("Type", out var typeProp))
-            throw new JsonException("Missing Type discriminator");
-
-        string type = typeProp.GetString();
-
-        return type switch
-        {
-            "Weapon" => doc.RootElement.Deserialize<Game>(options),
-            "Armor" => doc.RootElement.Deserialize<ServerItem>(options),
-            _ => throw new JsonException($"Unknown type: {type}")
-        };
+        _typeDiscriminator = typeDiscriminator;
+        _typeMap = knownTypes.ToDictionary(
+            t => t.Name,
+            t => t
+        );
     }
 
-    public override void Write(Utf8JsonWriter writer, Item value, JsonSerializerOptions options)
+    public override TBase Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var type = value.GetType().Name;
-        using var jsonDoc = JsonDocument.Parse(JsonSerializer.Serialize(value, value.GetType(), options));
+        using JsonDocument document = JsonDocument.ParseValue(ref reader);
+        if (!document.RootElement.TryGetProperty(_typeDiscriminator, out var typeElement))
+            throw new JsonException($"Missing discriminator '{_typeDiscriminator}'");
+
+        var typeName = typeElement.GetString();
+        if (!_typeMap.TryGetValue(typeName, out var targetType))
+            throw new JsonException($"Unknown type discriminator '{typeName}'");
+
+        string rawJson = document.RootElement.GetRawText();
+        return (TBase)JsonSerializer.Deserialize(rawJson, targetType, options)!;
+    }
+
+    public override void Write(Utf8JsonWriter writer, TBase value, JsonSerializerOptions options)
+    {
+        var type = value!.GetType();
+        using var jsonDoc = JsonDocument.Parse(JsonSerializer.Serialize(value, type, options));
+
         writer.WriteStartObject();
-        writer.WriteString("Type", type); // Discriminator
+        writer.WriteString(_typeDiscriminator, type.Name);
 
         foreach (var prop in jsonDoc.RootElement.EnumerateObject())
         {

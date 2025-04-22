@@ -5,6 +5,6 @@ namespace GameCenter.Domain.Models.Games.Entities.Fileds
 {
     public class ChoiceTranslation : GameOptionTranslation
     {
-        public List<string> Choices { get; }
+        public List<string> Choices { get; set; }
     }
 }
