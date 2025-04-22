@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using GameCenter.Domain;
 using System.Text.Json.Serialization;
+using GameCenter.Domain.Models.Items.Entities;
+using System.Text.Json;
+using GameCenter.Domain.Models.Games.Entities;
 
 const string JwtSecret = "2bfa15feba1b91f5f104342af1ebb4246241713c7843ad39579146862c887eed";
 
@@ -18,6 +21,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // IGNORA RECURSIVIDADE
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.Converters.Add(new ItemConverter());
     options.JsonSerializerOptions.IncludeFields = true;
     options.JsonSerializerOptions.UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement;
 }); ;
@@ -117,4 +121,38 @@ static string GenerateToken(string userId, int expireMinutes = 60)
         signingCredentials: creds);
 
     return new JwtSecurityTokenHandler().WriteToken(token);
+}
+
+class ItemConverter : JsonConverter<Item>
+{
+    public override Item Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        using JsonDocument doc = JsonDocument.ParseValue(ref reader);
+        if (!doc.RootElement.TryGetProperty("Type", out var typeProp))
+            throw new JsonException("Missing Type discriminator");
+
+        string type = typeProp.GetString();
+
+        return type switch
+        {
+            "Weapon" => doc.RootElement.Deserialize<Game>(options),
+            "Armor" => doc.RootElement.Deserialize<ServerItem>(options),
+            _ => throw new JsonException($"Unknown type: {type}")
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, Item value, JsonSerializerOptions options)
+    {
+        var type = value.GetType().Name;
+        using var jsonDoc = JsonDocument.Parse(JsonSerializer.Serialize(value, value.GetType(), options));
+        writer.WriteStartObject();
+        writer.WriteString("Type", type); // Discriminator
+
+        foreach (var prop in jsonDoc.RootElement.EnumerateObject())
+        {
+            prop.WriteTo(writer);
+        }
+
+        writer.WriteEndObject();
+    }
 }
