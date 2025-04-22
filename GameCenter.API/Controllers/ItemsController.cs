@@ -1,4 +1,3 @@
-using GameCenter.Domain.Models.Items.Entities;
 using GameCenter.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +14,11 @@ namespace GameCenter.API.Controllers
             _itemsAppService = itemsAppService;
         }
 
-        [HttpGet()]
-        public IEnumerable<Item> Get()
+        [HttpGet]
+        public IActionResult Get()
         {
             var values = _itemsAppService.GetItems();
-            return values;
+            return Ok(values);
         }
 
     }

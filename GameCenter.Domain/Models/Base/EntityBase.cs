@@ -8,7 +8,7 @@ namespace GameCenter.Common.Entities
     {
         [BsonId]
         [BsonRepresentation(BsonType.String)]
-        public virtual Guid Id { get; set; }
+        public virtual Guid Id { get; set; } = Guid.NewGuid();
         public virtual void SetId(Guid key)
         {
             if (key.Equals(default)) throw new Exception("Index not found");

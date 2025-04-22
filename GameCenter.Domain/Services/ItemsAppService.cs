@@ -9,15 +9,15 @@ namespace GameCenter.Domain.Services
 {
     public class ItemsAppService : IItemsAppService
     {
-        private readonly MongoDbContext _mongoDb;
-        public ItemsAppService(MongoDbContext mongoDb)
+        private readonly IMongoCollection<Item> _itemsDb;
+        public ItemsAppService(IMongoDbContext mongoDb)
         {
-            _mongoDb = mongoDb;
+            _itemsDb = mongoDb.Database.GetCollection<Item>("items");
         }
 
         public IEnumerable<Item> GetItems()
         {
-            return _mongoDb.Items.Find(_ => true).ToList();
+            return _itemsDb.Find(_ => true).ToList();
         }
     }
 }
