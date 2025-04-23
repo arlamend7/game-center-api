@@ -21,5 +21,12 @@ namespace GameCenter.API.Controllers
             return Ok(values);
         }
 
+        [HttpGet("Saves")]
+        public IActionResult GetSaves()
+        {
+            var values = _itemsAppService.GetGameSaves();
+            return Ok(values);
+        }
+
     }
 }

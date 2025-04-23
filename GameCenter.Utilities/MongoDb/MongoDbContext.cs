@@ -43,6 +43,7 @@ namespace GameCenter.Utilities.MongoDb
                 new EnumRepresentationConvention(BsonType.String, false),
             };
             ConventionRegistry.Register("EnumStringConvention", pack, t => true);
+
         }
     }
     public interface IMongoDbContext
