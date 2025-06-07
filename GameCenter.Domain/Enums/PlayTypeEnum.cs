@@ -4,6 +4,13 @@
     {
         tournament,
         tournamentPoints,
-        singleMatch
+        Coop,
+        Solo
     }
+    public enum SessionTypeEnum
+    {
+        Single,
+        Persistent   
+    }
+
 }

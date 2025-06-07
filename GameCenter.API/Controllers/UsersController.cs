@@ -123,7 +123,9 @@ namespace GameCenter.API.Controllers
 
         private string CreateToken(User user) {
             _tokenBuilder.AddInformation("UserId", user.Id.ToString());
-            _tokenBuilder.AddInformation("email", user.FullName.ToString());
+            _tokenBuilder.AddInformation("Email", user.Email.ToString());
+            _tokenBuilder.AddInformation("FullName", user.FullName.ToString());
+            _tokenBuilder.AddInformation("NickName", user.NickName.ToString());
             _tokenBuilder.AddInformation("UserTag", user.Tag.ToString());
             return _tokenBuilder.Build();
         }

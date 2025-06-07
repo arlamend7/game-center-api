@@ -6,7 +6,6 @@ namespace GameCenter.Domain.Models.GameSaves.Entities
     public class GameAction
     {
         public Guid UserId { get; set; }
-        public Guid MatchId { get; set; }
         public string Context { get; set; }
         public object Value { get; set; }
         public DateTime CreateAt { get; set; }

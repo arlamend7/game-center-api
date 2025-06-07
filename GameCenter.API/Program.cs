@@ -10,12 +10,21 @@ using GameCenter.Utilities.Injectors.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using SGTC.Core.Apps.Interfaces;
+using SGTC.Core.Apps;
+using SGTC.Signature.API.Authorization;
+using GameCenter.Domain.Models.GameSaves.Entities;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<AppUpdateManagerMiddleware>();
+}).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // IGNORA RECURSIVIDADE
@@ -38,14 +47,44 @@ builder.Services.AddControllers().AddJsonOptions(options =>
             .Add<TextConfig>(FieldTypeEnum.Text)
             .Build()
     );
+    options.JsonSerializerOptions.Converters.Add(
+       PolymorphicJsonConverterFactory
+           .For<GameSave>()
+           .Add<GamePersistentSave>()
+           .Add<GameSoloSave>()
+           .Add<GameTournamentPointsSave>()
+           .Add<GameTournamentSave>()
+           .Add<GameCoopSave>()
+           .Build()
+   );
+
+   // options.JsonSerializerOptions.Converters.Add(
+   //    PolymorphicJsonConverterFactory
+   //        .For<GameMatch>()
+   //        .Add<GameMultiplayerMatch>()
+   //        .Build()
+   //);
+
+    options.JsonSerializerOptions.Converters.Add(
+       PolymorphicJsonConverterFactory
+           .For<UserGameResult>()
+           .Add<WinLoseGameResult>()
+           .Add<OrderGameResult>()
+           .Add<PointGameResult>()
+           .Build()
+   );
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.InjectDomain(builder.Configuration);
+builder.Services.AddScoped<IAppManager, AppManager>()
+                .AddScoped(provider => provider.GetService<IAppManager>()!.GetUserSession())
+                .InjectDomain(builder.Configuration);
 
 var injectorSetting = new InjectorSetting();
 builder.Configuration.Bind(injectorSetting);
+builder.Services.AddSwaggerGen(c => { ConfigureSwagger(c); });
+
 builder.Services.AddAuthorization(x =>
 {
     x.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -60,7 +99,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false, // don't validate issuer
+                        ValidateAudience = false, // don't validate audience
+                        ValidateLifetime = false, // optional: disable if you don't care about expiry
+                        ValidateIssuerSigningKey = true, // this is what you care about
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(injectorSetting.Token.Key))
                     };
 
@@ -118,3 +160,29 @@ app.MapControllers();
 app.MapHub<RoomHub>("/room");
 
 app.Run();
+
+static void ConfigureSwagger(SwaggerGenOptions config)
+{
+    config.SwaggerDoc("v1", new OpenApiInfo { Title = "Game Center - API", Version = "v1" });
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Name = "JWT Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    config.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+    config.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+}

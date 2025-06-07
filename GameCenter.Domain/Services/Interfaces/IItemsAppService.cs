@@ -7,6 +7,6 @@ namespace GameCenter.Domain.Services.Interfaces
     public interface IItemsAppService
     {
         IEnumerable<Item> GetItems();
-        IEnumerable<GameSave> GetGameSaves();
+        IEnumerable<GameSave> GetSaves();
     }
 }

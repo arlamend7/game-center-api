@@ -14,15 +14,16 @@ namespace GameCenter.Domain.Models.Players.Entities
         public List<UserSimpleInfo> Friends { get; set; } = new List<UserSimpleInfo>();
         public UserPreference Preferences { get; set; } = new UserPreference();
     }
-
-    public class UserSimpleInfo : EntityBase
+    public class UniqueUserInfo : EntityBase
     {
         public string NickName { get; set; }
+        public string Tag { get; set; }
+    }
+    public class UserSimpleInfo : UniqueUserInfo 
+    {
         public string FullName => string.Join(" ", new[] { FirstName, MiddleName, LastName }.Where(x => string.IsNullOrWhiteSpace(x)));
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public string Tag { get; set; }
-
     }
 }

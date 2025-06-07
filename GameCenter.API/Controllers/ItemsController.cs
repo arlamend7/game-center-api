@@ -1,4 +1,5 @@
 using GameCenter.Domain.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameCenter.API.Controllers
@@ -15,6 +16,7 @@ namespace GameCenter.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Get()
         {
             var values = _itemsAppService.GetItems();
@@ -22,9 +24,10 @@ namespace GameCenter.API.Controllers
         }
 
         [HttpGet("Saves")]
+        [Authorize]
         public IActionResult GetSaves()
         {
-            var values = _itemsAppService.GetGameSaves();
+            var values = _itemsAppService.GetSaves();
             return Ok(values);
         }
 
